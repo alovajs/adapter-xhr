@@ -1,64 +1,83 @@
-# @alova/adapter-axios
+# @alova/adapter-xhr
 
-alova 的 axios 适配器
+alova 的 XMLHttpRequest 适配器
 
-[![npm](https://img.shields.io/npm/v/@alova/adapter-axios)](https://www.npmjs.com/package/@alova/adapter-axios)
-[![build](https://github.com/alovajs/adapter-axios/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/alovajs/adapter-axios/actions/workflows/main.yml)
-[![coverage status](https://coveralls.io/repos/github/alovajs/adapter-axios/badge.svg?branch=main)](https://coveralls.io/github/alovajs/adapter-axios?branch=main)
+[![npm](https://img.shields.io/npm/v/@alova/adapter-xhr)](https://www.npmjs.com/package/@alova/adapter-xhr)
+[![build](https://github.com/alovajs/adapter-xhr/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/alovajs/adapter-xhr/actions/workflows/main.yml)
+[![coverage status](https://coveralls.io/repos/github/alovajs/adapter-xhr/badge.svg?branch=main)](https://coveralls.io/github/alovajs/adapter-xhr?branch=main)
 ![typescript](https://badgen.net/badge/icon/typescript?icon=typescript&label)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 <p>中文 | <a href="./README.md">📑English</a></p>
 
-[官网](https://alova.js.org/extension/alova-adapter-axios) | [核心库 alova](https://github.com/alovajs/alova)
+[官网](https://alova.js.org/extension/alova-adapter-xhr) | [核心库 alova](https://github.com/alovajs/alova)
+
+## 安装
+
+```bash
+npm install @alova/adapter-xhr --save
+```
 
 ## 使用方法
 
 ### 创建 alova
 
-使用 **axiosRequestAdapter** 作为 alova 的请求适配器。
+使用 **xhrRequestAdapter** 作为 alova 的请求适配器。
 
 ```javascript
 import { createAlova } from 'alova';
-import VueHook from 'alova/vue';
-import { axiosRequestAdapter } from '@alova/adapter-axios';
+import { xhrRequestAdapter } from '@alova/adapter-xhr';
 
 const alovaInst = createAlova(
-  baseURL: 'https://api.alovajs.org',
-  statesHook: VueHook,
-  // highlight-start
-  requestAdapter: axiosResponseAdapter(),
-  // highlight-end
+  // ...
+  requestAdapter: xhrResponseAdapter(),
+  // ...
 );
 ```
 
 ### 请求
 
-请求的使用方法与 web 环境中使用完全一致。已经完全兼容**axios**，你可以在创建 method 实例的*config*中指定`axios`支持的[全部配置项](https://axios-http.com/docs/req_config)
+XMLHttpRequest 适配器提供了基本的配置参数，包含`responseType`、`withCredentials`、`mimeType`、`auth`，具体如下：
 
-> 以 Vue 为例
+```javascript
+const list = () =>
+	alovaInst.Get('/list', {
+		/**
+		 * 设置响应数据类型
+		 * 可以设置更改响应类型。 值为：“arraybuffer”、“blob”、“document”、“json”和“text”
+		 * 默认为“json”
+		 */
+		responseType: 'text',
 
-```html
-<tempate>
-	<div v-if="loading">加载中...</div>
-	<div>请求数据为：{{ data }}</div>
-</tempate>
+		/**
+		 * 当凭证要包含在跨源请求中时为true。 当它们被排除在跨源请求中以及当 cookie 在其响应中被忽略时为 false。 默认为false
+		 */
+		withCredentials: true,
 
-<script setup>
-	const list = () =>
-		alovaInst.Get('/list', {
-			// 设置的参数将传递给axios
-			paramsSerializer: params => {
-				return Qs.stringify(params, { arrayFormat: 'brackets' });
-			}
-		});
-	const { loading, data } = useRequest(list);
-</script>
+		/**
+		 * 设置响应数据的mimeType
+		 */
+		mimeType: 'text/plain; charset=x-user-defined',
+
+		/**
+		 * auth 表示使用 HTTP Basic 身份验证，并提供凭据。
+		 * 这将设置一个 `Authorization` 标头，覆盖任何现有的
+		 * 使用 `headers` 设置的 `Authorization` 自定义标头。
+		 * 请注意，只有 HTTP Basic 身份验证可以通过此参数进行配置。
+		 * 对于 Bearer 令牌等，请改用 `Authorization` 自定义标头。
+		 */
+		auth: {
+			username: 'name1',
+			password: '123456'
+		}
+	});
+const { loading, data } = useRequest(list);
+// ...
 ```
 
 ### 上传
 
-使用`FormData`上传文件，这个`FormData`实例会被传递到 axios 中，与 axios 上传文件用法保持了一致。
+使用`FormData`上传文件，这个`FormData`实例会通过`xhr.send`发送到服务端。
 
 ```javascript
 const uploadFile = imageFile => {
@@ -115,11 +134,11 @@ const handleImageDownload = () => {
 
 ## 模拟请求适配器兼容
 
-在开发应用时，我们仍然可能需要用到模拟请求。只是默认情况下，[模拟请求适配器(@alova/mock)](/extension/alova-mock)的响应数据是一个`Response`实例，即默认兼容`GlobalFetch`请求适配器，当使用 axios 适配器时，我们需要让模拟请求适配器的响应数据是**AxiosResponse**兼容的，错误实例是**AxiosError**，因此你需要使用**@alova/adapter-axios**包中导出的`axiosMockResponse`作为响应适配器。
+在开发应用时，我们仍然可能需要用到模拟请求。只是默认情况下，[模拟请求适配器(@alova/mock)](https://alova.js.org/extension/alova-mock)的响应数据是一个`Response`实例，即默认兼容`GlobalFetch`请求适配器，当使用 XMLHttpRequest 适配器时，我们需要让模拟请求适配器的响应数据适配 XMLHttpRequest 适配器，此时你需要使用**@alova/adapter-xhr**包中导出的`xhrMockResponse`作为响应适配器。
 
 ```javascript
 import { defineMock, createAlovaMockAdapter } from '@alova/mock';
-import { axiosRequestAdapter, axiosMockResponse } from '@alova/adapter-axios';
+import { xhrRequestAdapter, xhrMockResponse } from '@alova/adapter-xhr';
 
 const mocks = defineMock({
 	// ...
@@ -127,17 +146,16 @@ const mocks = defineMock({
 
 // 模拟数据请求适配器
 export default createAlovaMockAdapter([mocks], {
-	// 指定taro请求适配器后，未匹配模拟接口的请求将使用这个适配器发送请求
-	httpAdapter: axiosRequestAdapter(),
+	// 指定请求适配器后，未匹配模拟接口的请求将使用这个适配器发送请求
+	httpAdapter: xhrRequestAdapter(),
 
-	// axiosMockResponse中包含了onMockResponse和onMockError
-	// 用于将模拟数据转换为AxiosResponse和AxiosError兼容的格式
-	...axiosMockResponse
+	// 使用xhrMockResponse，让模拟数据适配XMLHttpRequest适配器
+	onMockResponse: xhrMockResponse
 });
 
 export const alovaInst = createAlova({
 	// ...
 	// 通过环境变量控制是否使用模拟请求适配器
-	requestAdapter: process.env.NODE_ENV === 'development' ? mockAdapter : axiosRequestAdapter()
+	requestAdapter: process.env.NODE_ENV === 'development' ? mockAdapter : xhrRequestAdapter()
 });
 ```

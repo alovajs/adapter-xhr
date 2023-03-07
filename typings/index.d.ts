@@ -29,7 +29,7 @@ interface AlovaXHRRequestConfig {
 	mimeType?: string;
 
 	/**
-	 *`auth` 表示应该使用 HTTP Basic 身份验证，并提供凭据。
+	 * `auth` 表示应该使用 HTTP Basic 身份验证，并提供凭据。
 	 * 这将设置一个 `Authorization` 标头，覆盖任何现有的
 	 * 使用 `headers` 设置的 `Authorization` 自定义标头。
 	 * 请注意，只有 HTTP Basic 身份验证可以通过此参数进行配置。
