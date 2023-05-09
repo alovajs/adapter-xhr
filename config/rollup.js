@@ -3,8 +3,11 @@
  * @LastEditors: JOU(wx: huzhen555)
  * @LastEditTime: 2022-11-30 21:15:34
  */
-var typescript = require('rollup-plugin-typescript2');
-var { readFileSync } = require('fs');
+const typescript = require('rollup-plugin-typescript2');
+const pkg = require('../package.json');
+const version = process.env.VERSION || pkg.version;
+const author = pkg.author;
+const repository = pkg.repository.url.replace('git', 'https').replace('.git', '');
 
 const getCompiler = (
 	opt = {
@@ -18,12 +21,8 @@ const getCompiler = (
 	}
 ) => typescript(opt);
 exports.getCompiler = getCompiler;
-
-const pkg = JSON.parse(readFileSync('package.json').toString() || '{}');
-const { version, author, homepage } = pkg;
-const repository = pkg.repository.url.replace('git', 'https').replace('.git', '');
 exports.banner = `/**
-  * ${pkg.name} ${version} (${homepage})
+  * ${pkg.name} ${version} (${pkg.homepage})
   * Copyright ${new Date().getFullYear()} ${author}. All Rights Reserved
   * Licensed under MIT (${repository}/blob/master/LICENSE)
   */
