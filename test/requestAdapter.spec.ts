@@ -36,7 +36,7 @@ describe('request adapter', () => {
 		const { loading, data, downloading, error, onSuccess } = useRequest(Get);
 		expect(loading.value).toBeTruthy();
 		expect(data.value).toBeUndefined();
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value).toBeUndefined();
 
 		await untilCbCalled(onSuccess);
@@ -48,7 +48,7 @@ describe('request adapter', () => {
 			b: '2'
 		});
 		expect(data.value.data.path).toBe('/unit-test');
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value).toBeUndefined();
 	});
 
@@ -201,7 +201,7 @@ describe('request adapter', () => {
 		const { loading, data, downloading, error, onSuccess } = useRequest(Get);
 		expect(loading.value).toBeTruthy();
 		expect(data.value).toBeUndefined();
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value).toBeUndefined();
 
 		await untilCbCalled(onSuccess);
@@ -225,7 +225,7 @@ describe('request adapter', () => {
 		const { loading, data, downloading, error, onError } = useRequest(Get);
 		expect(loading.value).toBeTruthy();
 		expect(data.value).toBeUndefined();
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value).toBeUndefined();
 
 		const { error: errRaw } = await untilCbCalled(onError);
@@ -251,13 +251,13 @@ describe('request adapter', () => {
 		const { loading, data, downloading, error, onError } = useRequest(Get);
 		expect(loading.value).toBeTruthy();
 		expect(data.value).toBeUndefined();
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value).toBeUndefined();
 
 		await untilCbCalled(onError);
 		expect(loading.value).toBeFalsy();
 		expect(data.value).toBeUndefined();
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value?.message).toBe('canceled');
 	});
 
@@ -275,14 +275,14 @@ describe('request adapter', () => {
 		const { loading, data, downloading, error, abort, onError } = useRequest(Get);
 		expect(loading.value).toBeTruthy();
 		expect(data.value).toBeUndefined();
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value).toBeUndefined();
 
 		abort();
 		await untilCbCalled(onError);
 		expect(loading.value).toBeFalsy();
 		expect(data.value).toBeUndefined();
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value?.message).toBe('The user aborted a request');
 	});
 
@@ -304,7 +304,7 @@ describe('request adapter', () => {
 			type: 'image/jpeg'
 		});
 		formData.append('file', imageFile);
-		const Post = alovaInst.Post<Result<string>>('/unit-test', formData, {
+		const Post = alovaInst.Post<Result<string>>('/unit-test-upload', formData, {
 			withCredentials: true,
 			// jsdom的xhr.upload不支持上传功能，因此即使设置为true了也无法获取上传进度
 			enableUpload: true
@@ -315,9 +315,10 @@ describe('request adapter', () => {
 		expect(loading.value).toBeFalsy();
 		expect(data.value.code).toBe(200);
 		expect(data.value.data.method).toBe('POST');
-		expect(data.value.data.path).toBe('/unit-test');
-		expect(uploading.value).toEqual({ total: 0, loaded: 0 });
-		expect(downloading.value).toEqual({ total: 0, loaded: 0 });
+		expect(data.value.data.path).toBe('/unit-test-upload');
+		expect(data.value.data.params).toStrictEqual({ contentType: null }); // 上传时不能设置任何content-type
+		expect(uploading.value).toStrictEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 0, loaded: 0 });
 		expect(error.value).toBeUndefined();
 	});
 
@@ -340,8 +341,8 @@ describe('request adapter', () => {
 		await untilCbCalled(onSuccess);
 		expect(loading.value).toBeFalsy();
 		expect(data.value).toBeInstanceOf(Blob);
-		expect(uploading.value).toEqual({ total: 0, loaded: 0 });
-		expect(downloading.value).toEqual({ total: 3273178, loaded: 3273178 });
+		expect(uploading.value).toStrictEqual({ total: 0, loaded: 0 });
+		expect(downloading.value).toStrictEqual({ total: 3273178, loaded: 3273178 });
 		expect(error.value).toBeUndefined();
 	});
 });

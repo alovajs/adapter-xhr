@@ -53,7 +53,7 @@ export default function requestAdapter() {
 				});
 
 				// Content-Type在未指定时默认使用application/json; charset=UTF-8
-				if (!isContentTypeSet) {
+				if (!isContentTypeSet && (data ? data.toString() !== '[object FormData]' : true)) {
 					xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 				}
 

@@ -29,6 +29,12 @@ export default [
 			// Respond with the "ArrayBuffer".
 			ctx.body(imageBuffer)
 		);
+	}),
+	rest.post(mockBaseURL + '/unit-test-upload', (req, res, ctx) => {
+		// Read the image from the file system using the "fs" module.
+		return result(200, req, res, ctx, true, {
+			contentType: req.headers.get('Content-Type')
+		});
 	})
 ];
 
