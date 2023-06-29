@@ -1,6 +1,6 @@
 # @alova/adapter-xhr
 
-alova 的 XMLHttpRequest 适配器
+XMLHttpRequest adapter for alova
 
 [![npm](https://img.shields.io/npm/v/@alova/adapter-xhr)](https://www.npmjs.com/package/@alova/adapter-xhr)
 [![build](https://github.com/alovajs/adapter-xhr/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/alovajs/adapter-xhr/actions/workflows/main.yml)
@@ -10,7 +10,7 @@ alova 的 XMLHttpRequest 适配器
 
 <p>English | <a href="./README.zh-CN.md">📑中文</a></p>
 
-[官网](https://alova.js.org/extension/alova-adapter-xhr) | [核心库 alova](https://github.com/alovajs/alova)
+[website](https://alova.js.org/extension/alova-adapter-xhr) | [alova](https://github.com/alovajs/alova)
 
 ## Install
 
