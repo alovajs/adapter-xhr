@@ -116,8 +116,11 @@ export const data2QueryString = (data: Record<string, any>) => {
  * @returns 响应头对象
  */
 export const parseResponseHeaders = (headerString: string) => {
-	const headersAry = headerString.trim().split(/[\r\n]+/);
 	const headersMap = {} as AlovaXHRResponseHeaders;
+	if (headerString === '') {
+		return headersMap;
+	}
+	const headersAry = headerString.trim().split(/[\r\n]+/);
 	headersAry.forEach(line => {
 		const [headerName, value] = line.split(/:\s*/);
 		headersMap[headerName] = value;
