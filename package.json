@@ -54,7 +54,7 @@
 		"typings/*.d.ts"
 	],
 	"devDependencies": {
-		"@alova/mock": "^1.2.1",
+		"@alova/mock": "^1.5.1",
 		"@babel/core": "^7.18.2",
 		"@babel/preset-env": "^7.18.2",
 		"@commitlint/config-conventional": "^17.4.4",
@@ -68,7 +68,7 @@
 		"@types/jest": "^29.4.0",
 		"@typescript-eslint/eslint-plugin": "^5.54.0",
 		"@typescript-eslint/parser": "^5.54.0",
-		"alova": "^2.3.1",
+		"alova": "^2.16.2",
 		"babel-jest": "^29.2.2",
 		"commitlint": "^17.5.1",
 		"coveralls": "^3.1.1",
