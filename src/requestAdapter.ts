@@ -57,19 +57,15 @@ export default function requestAdapter() {
 					xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 				}
 
-				// 如果启用了下载进度，则监听下载事件
-				if (config.enableDownload) {
-					xhr.onprogress = event => {
-						downloadHandler(event.loaded, event.total);
-					};
-				}
+				// 监听下载事件
+				xhr.onprogress = event => {
+					downloadHandler(event.loaded, event.total);
+				};
 
-				// 如果启用了上传进度，则监听上传事件
-				if (config.enableUpload) {
-					xhr.upload.onprogress = event => {
-						uploadHandler(event.loaded, event.total);
-					};
-				}
+				// 监听上传事件
+				xhr.upload.onprogress = event => {
+					uploadHandler(event.loaded, event.total);
+				};
 
 				// 请求成功事件
 				xhr.onload = () => {
