@@ -1,6 +1,6 @@
 {
 	"name": "@alova/adapter-xhr",
-	"version": "1.0.3",
+	"version": "1.0.6",
 	"description": "XMLHttpRequest adapter for alova.js",
 	"homepage": "https://alova.js.org",
 	"main": "dist/alova-adapter-xhr.esm.js",
