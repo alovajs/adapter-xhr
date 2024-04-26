@@ -59,12 +59,12 @@ export default function requestAdapter() {
 
 				// 监听下载事件
 				xhr.onprogress = event => {
-					downloadHandler(event.loaded, event.total);
+					downloadHandler(event.total, event.loaded);
 				};
 
 				// 监听上传事件
 				xhr.upload.onprogress = event => {
-					uploadHandler(event.loaded, event.total);
+					uploadHandler(event.total, event.loaded);
 				};
 
 				// 请求成功事件
